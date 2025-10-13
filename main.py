@@ -66,7 +66,7 @@ async def read_root(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 @app.post("/api/run-pipeline", status_code=202)
-async def run_pipeline(topic: str = "人工智慧"):
+async def run_pipeline(topic: str = "科技"):
     """
     手動觸發一次完整的新聞處理流程。
     """
