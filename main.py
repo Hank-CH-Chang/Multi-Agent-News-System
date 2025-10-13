@@ -66,7 +66,7 @@ async def read_root(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 @app.post("/api/run-pipeline", status_code=202)
-async def run_pipeline(topic: str = "投資、財經、產業、股市"):
+async def run_pipeline(topic: str = "人工智慧"):
     """
     手動觸發一次完整的新聞處理流程。
     """
@@ -109,7 +109,7 @@ async def scheduled_news_pipeline_job():
     print(f"[Scheduler] Triggering scheduled news pipeline job...")
     commander = mcp_registry.get("commander_agent")
     try:
-        default_topic = "投資、財經、產業、股市"
+        default_topic = "人工智慧"
         # Run the synchronous pipeline function in a separate thread
         await asyncio.to_thread(commander.start_pipeline, default_topic)
         print(f"[Scheduler] Successfully completed job for topic '{default_topic}'.")
