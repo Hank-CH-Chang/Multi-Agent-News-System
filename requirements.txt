@@ -1,0 +1,19 @@
+# === LLM & Google Gemini ===
+google-generativeai>=0.8.0
+
+# === Web & I/O ===
+requests>=2.31.0
+feedparser>=6.0.11
+aiofiles
+
+# === Scheduling ===
+APScheduler
+
+# === Logging & Utilities ===
+tqdm>=4.66.0
+
+# === FastAPI / MCP (optional, for web or API extensions) ===
+fastapi>=0.115.0
+uvicorn>=0.30.0
+
+pytz

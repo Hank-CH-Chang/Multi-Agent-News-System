@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>投資新聞彙整</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.5/dist/cdn.min.js" defer></script>
+</head>
+<body class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300" x-data="newsController()" x-init="loadArticles(sortBy)">
+
+    <!-- 頁首 -->
+    <header class="sticky top-0 z-10 bg-white dark:bg-gray-800 shadow-md">
+        <div class="max-w-6xl mx-auto flex justify-between items-center px-4 py-3">
+            <h1 class="text-2xl font-bold text-indigo-600 dark:text-indigo-400">📰 投資新聞彙整</h1>
+
+            <!-- 排序切換按鈕 -->
+            <div class="flex items-center space-x-3">
+                <button
+                    :class="sortBy === 'latest' ? 'bg-indigo-600 text-white' : 'bg-gray-200 dark:bg-gray-700 dark:text-gray-200'"
+                    class="px-4 py-1 rounded-lg text-sm font-medium focus:outline-none transition"
+                    @click="sortBy = 'latest'; loadArticles('latest')">
+                    最新
+                </button>
+                <button
+                    :class="sortBy === 'popular' ? 'bg-indigo-600 text-white' : 'bg-gray-200 dark:bg-gray-700 dark:text-gray-200'"
+                    class="px-4 py-1 rounded-lg text-sm font-medium focus:outline-none transition"
+                    @click="sortBy = 'popular'; loadArticles('popular')">
+                    最熱門
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 內容 -->
+    <main class="max-w-6xl mx-auto p-4">
+        <!-- 載入中 -->
+        <template x-if="loading">
+            <div class="text-center py-16 text-gray-500 animate-pulse">載入中...</div>
+        </template>
+
+        <!-- 卡片容器 -->
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" x-show="!loading" x-transition>
+            <template x-for="article in articles" :key="article.id">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow hover:shadow-lg transition transform hover:-translate-y-1">
+                    <img :src="article.image" alt="thumbnail" class="rounded-t-2xl w-full h-48 object-cover">
+                    <div class="p-4 flex flex-col justify-between flex-grow">
+                        <div>
+                            <div class="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400 mb-2">
+                                <span class="px-2 py-0.5 bg-indigo-100 dark:bg-indigo-700 dark:text-indigo-200 rounded-full text-xs font-medium" x-text="article.category"></span>
+                                <span>🔥 <span x-text="article.popularity"></span></span>
+                            </div>
+                            <h2 class="font-semibold text-lg line-clamp-2 mb-2" x-text="article.title"></h2>
+                            <p class="text-sm text-gray-600 dark:text-gray-300 line-clamp-3" x-text="article.summary"></p>
+                        </div>
+                        <div class="flex justify-end mt-3">
+                            <a :href="article.url" target="_blank" class="text-indigo-600 dark:text-indigo-400 text-sm font-medium hover:underline">閱讀更多 →</a>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </main>
+
+    <!-- 深淺色切換 -->
+    <button
+        class="fixed bottom-6 right-6 bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-full shadow-lg transition"
+        @click="document.documentElement.classList.toggle('dark')">
+        🌗
+    </button>
+
+    <script>
+        function newsController() {
+            return {
+                articles: [],
+                loading: true,
+                sortBy: 'popular', // Default sort order
+                loadArticles(sortBy) {
+                    this.loading = true;
+                    this.sortBy = sortBy; // Update state
+                    axios.get(`/api/news?sort_by=${sortBy}`)
+                        .then(res => {
+                            this.articles = res.data.articles || [];
+                        })
+                        .catch(err => {
+                            console.error('Error loading articles:', err);
+                        })
+                        .finally(() => {
+                            this.loading = false;
+                        });
+                }
+            };
+        }
+    </script>
+
+</body>
+</html>
