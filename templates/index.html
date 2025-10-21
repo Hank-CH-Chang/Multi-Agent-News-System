@@ -52,7 +52,9 @@
                                 <span>🔥 <span x-text="article.popularity"></span></span>
                             </div>
                             <h2 class="font-semibold text-lg line-clamp-2 mb-2" x-text="article.title"></h2>
-                            <p class="text-sm text-gray-600 dark:text-gray-300 line-clamp-3" x-text="article.summary"></p>
+                            <p class="card-text" x-text="article.summary"></p>
+                            <p class="card-text"><small class="text-muted">Category: <span x-text="article.category"></span></small></p>
+                            <p class="card-text"><small class="text-muted">Date: <span x-text="article.timestamp"></span></small></p>
                         </div>
                         <div class="flex justify-end mt-3">
                             <a :href="article.url" target="_blank" class="text-indigo-600 dark:text-indigo-400 text-sm font-medium hover:underline">閱讀更多 →</a>
