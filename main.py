@@ -5,6 +5,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 import pytz
+from datetime import datetime
 
 # 核心元件
 from core.a2a_bus import A2ABus
@@ -92,6 +93,12 @@ async def get_news(sort_by: str = "latest"):
         raise HTTPException(status_code=400, detail="Invalid sort_by parameter. Use 'latest' or 'popular'.")
 
     news_list = await storage.get_sorted(sort_by=sort_by)
+    
+    # Format the timestamp for each article
+    for article in news_list:
+        if 'timestamp' in article and isinstance(article['timestamp'], (int, float)):
+            article['timestamp'] = datetime.fromtimestamp(article['timestamp']).strftime('%Y-%m-%d %H:%M')
+            
     return {"status": "success", "count": len(news_list), "articles": news_list}
 
 @app.get("/api/agents")
