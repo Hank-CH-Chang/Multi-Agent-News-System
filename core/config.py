@@ -3,7 +3,7 @@ import os
 from datetime import timedelta
 
 # === LLM 設定 ===
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "AIzaSyDGA-n3UxeFf_gBiu0FB3xLYF97s04hQ8c")
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 LLM_MODEL = "gemini-2.5-flash"  # 預設模型，可改成 gemini-1.5-pro / flash
 
 # === Database ===
